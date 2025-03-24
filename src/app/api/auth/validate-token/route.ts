@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Find the token in the database
-    const resetToken = await prisma.passwordReset.findUnique({
+    const resetToken = await prisma.passwordreset.findUnique({
       where: { token },
     });
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     // Check if token is expired
     if (resetToken.expires < new Date()) {
       // Delete expired token
-      await prisma.passwordReset.delete({
+      await prisma.passwordreset.delete({
         where: { token },
       });
       

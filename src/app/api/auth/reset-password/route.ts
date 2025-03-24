@@ -33,12 +33,12 @@ export async function POST(request: NextRequest) {
     expires.setHours(expires.getHours() + 1); // Token expires in 1 hour
 
     // Delete any existing reset tokens for this user
-    await prisma.passwordReset.deleteMany({
+    await prisma.passwordreset.deleteMany({
       where: { email },
     });
 
     // Create new reset token
-    await prisma.passwordReset.create({
+    await prisma.passwordreset.create({
       data: {
         token,
         email,
@@ -75,7 +75,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Find the token in the database
-    const resetToken = await prisma.passwordReset.findUnique({
+    const resetToken = await prisma.passwordreset.findUnique({
       where: { token },
     });
 
@@ -89,7 +89,7 @@ export async function PUT(request: NextRequest) {
     // Check if token is expired
     if (resetToken.expires < new Date()) {
       // Delete expired token
-      await prisma.passwordReset.delete({
+      await prisma.passwordreset.delete({
         where: { token },
       });
       
@@ -109,7 +109,7 @@ export async function PUT(request: NextRequest) {
     });
 
     // Delete used token
-    await prisma.passwordReset.delete({
+    await prisma.passwordreset.delete({
       where: { token },
     });
 
