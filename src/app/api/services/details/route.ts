@@ -26,33 +26,50 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const serviceDetails = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email },
       select: {
         id: true,
         name: true,
         email: true,
         phone: true,
-        relation: true,
-        directorName: true,
-        directorCompany: true,
-        directorEmail: true,
-        deceasedName: true,
-        dateOfBirth: true,
-        dateOfPassing: true,
-        specialRequests: true,
-        servicePlan: true,
-        servicePrice: true,
         createdAt: true,
+        order: {
+          select: {
+            id: true,
+            relation: true,
+            directorName: true,
+            directorCompany: true,
+            directorEmail: true,
+            deceasedName: true,
+            dateOfBirth: true,
+            dateOfPassing: true,
+            serviceDate: true,
+            specialRequests: true,
+            servicePlan: true,
+            servicePrice: true,
+            status: true
+          }
+        }
       },
     });
 
-    if (!serviceDetails) {
+    if (!user) {
       return NextResponse.json(
-        { error: 'Service details not found' },
+        { error: 'User not found' },
         { status: 404 }
       );
     }
+
+    // Get the most recent order or an empty object if no orders exist
+    const latestOrder = user.order.length > 0 ? user.order[0] : {};
+
+    // Combine user and order data for the response
+    const serviceDetails = {
+      ...user,
+      ...latestOrder,
+      order: undefined // Remove the nested structure
+    };
 
     return NextResponse.json(serviceDetails);
   } catch (error) {
