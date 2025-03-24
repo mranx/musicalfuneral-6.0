@@ -27,9 +27,9 @@ const ServiceSelectionChip: React.FC<ServiceSelectionChipProps> = ({
       <h6 className="text-[#3F72AF] text-sm font-semibold py-2.5 px-3.5 rounded-full bg-[#3F72AF14]">
         {serviceName}
       </h6>
-      <h6 className="text-[#3F72AF] text-sm font-semibold py-2.5 px-3.5 rounded-full bg-[#3F72AF14]">
+      {/* <h6 className="text-[#3F72AF] text-sm font-semibold py-2.5 px-3.5 rounded-full bg-[#3F72AF14]">
         ${servicePrice}.00
-      </h6>
+      </h6> */}
     </div>
   );
 };

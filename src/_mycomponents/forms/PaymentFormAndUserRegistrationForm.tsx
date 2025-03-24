@@ -550,22 +550,36 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
                   onChange={handleChange}
                   className="w-full text-sm bg-[#E7E7E7] dark:bg-gray-700 dark:text-gray-200 p-2 border border-gray-300 rounded-md"
                   required
+                  onClick={(e) => {
+                    // Type assertion to access the showPicker method
+                    const input = e.target as HTMLInputElement;
+                    if (input.showPicker) {
+                      input.showPicker();
+                    }
+                  }}
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
-                  Date of Passing <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="date"
-                  name="dateOfPassing"
-                  value={formData.dateOfPassing}
-                  onChange={handleChange}
-                  className="w-full text-sm bg-[#E7E7E7] dark:bg-gray-700 dark:text-gray-200 p-2 border border-gray-300 rounded-md"
-                  required
-                />
-              </div>
+  <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+    Date of Passing <span className="text-red-500">*</span>
+  </label>
+  <input
+    type="date"
+    name="dateOfPassing"
+    value={formData.dateOfPassing}
+    onChange={handleChange}
+    className="w-full text-sm bg-[#E7E7E7] dark:bg-gray-700 dark:text-gray-200 p-2 border border-gray-300 rounded-md cursor-pointer"
+    required
+    onClick={(e) => {
+      // Type assertion to access the showPicker method
+      const input = e.target as HTMLInputElement;
+      if (input.showPicker) {
+        input.showPicker();
+      }
+    }}
+  />
+</div>
               <div>
   <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
     Service Date and Time <span className="text-red-500">*</span>
@@ -577,6 +591,13 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
     onChange={handleChange}
     className="w-full text-sm bg-[#E7E7E7] dark:bg-gray-700 dark:text-gray-200 p-2 border border-gray-300 rounded-md"
     required
+    onClick={(e) => {
+      // Type assertion to access the showPicker method
+      const input = e.target as HTMLInputElement;
+      if (input.showPicker) {
+        input.showPicker();
+      }
+    }}
   />
 </div>
             </div>
