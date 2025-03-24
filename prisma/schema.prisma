@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model admin {
+  id        String   @id @default(uuid())
+  email     String   @unique(map: "admin_email_key_new")
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model user {
+  id        String   @id @default(cuid())
+  email     String   @unique(map: "user_email_key_new")
+  password  String
+  name      String
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  order     order[]
+}
+
+model contentsection {
+  id          String   @id @default(uuid())
+  sectionName String   @unique(map: "ContentSection_sectionName_key")
+  title       String
+  description String?  @db.Text
+  imageUrl    String?
+  videoUrl    String?
+  buttonText  String?
+  buttonLink  String?
+  order       Int
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}
+
+model demovideo {
+  id        String   @id @default(uuid())
+  title     String
+  duration  String
+  src       String
+  thumbnail String?
+  order     Int
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model faqitem {
+  id        String   @id @default(uuid())
+  question  String
+  answer    String   @db.Text
+  order     Int
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model howitworksitem {
+  id          String   @id @default(uuid())
+  step        String
+  title       String
+  description String
+  order       Int
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}
+
+model order {
+  id              String   @id @default(uuid())
+  userId          String
+  servicePlan     String
+  servicePrice    Decimal  @db.Decimal(10, 2)
+  relation        String
+  directorName    String?
+  directorCompany String?
+  directorEmail   String?
+  deceasedName    String
+  dateOfBirth     DateTime
+  dateOfPassing   DateTime
+  serviceDate     DateTime? 
+  specialRequests String?  @db.Text
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+  user            user     @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
+
+  @@index([userId], map: "Order_userId_idx")
+}
+
+model passwordreset {
+  id        String   @id @default(uuid())
+  token     String   @unique(map: "PasswordReset_token_key")
+  email     String
+  expires   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([email], map: "PasswordReset_email_idx")
+}
+
+model pricingplan {
+  id        String   @id @default(uuid())
+  title     String
+  price     Decimal  @db.Decimal(10, 2)
+  features  String   @db.Text
+  order     Int
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model serviceitem {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  iconType    String
+  order       Int
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}
+
+model user_form_progress {
+  id          Int      @id @default(autoincrement())
+  orderId     String   @unique @map("order_id")
+  userId      String   @map("user_id")
+  formData    Json     @default("{}")
+  currentStep Int      @default(1) @map("current_step")
+  isCompleted Boolean  @default(false) @map("is_completed")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([orderId])
+  @@index([userId])
+  @@map("user_form_progress")
+}
